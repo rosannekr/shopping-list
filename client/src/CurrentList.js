@@ -28,7 +28,8 @@ class CurrentList extends React.Component {
         this.setState({data: json});
       })
       .catch(error => {
-        console.log(error);
+        fetch("currentApi/new/week")
+          .then(res=> res.json)
       });
   }
 
@@ -36,6 +37,24 @@ class CurrentList extends React.Component {
     // add item to this week, but first add to products and
     // week if not already there
     fetch("/currentApi/items", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ name: this.state.input })
+    })
+      .then(res => res.json())
+      .then(json => {
+        console.log(json)
+        this.setState({
+          data: json
+        });
+      });
+  }
+  autoAdd() {
+    // add item to this week, but first add to products and
+    // week if not already there
+    fetch("/currentApi/items/auto", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -86,7 +105,8 @@ class CurrentList extends React.Component {
         });
       });
   }
-  pushItemToNextWeek (){
+  pushItemToNextWeek (pushed){
+    let item = pushed
       //pushes item to next week's list
   }
 
@@ -99,19 +119,21 @@ class CurrentList extends React.Component {
         itemData={item}
         updateItem={itemStatus => this.updateItem(itemStatus)}
         deleteItem={unwanted => this.deleteItem(unwanted)}
+        pushToNext={item=>this.pushItemToNextWeek(item)}
       />
     ));
+    let newBtn= <button onClick={e => this.autoAdd()}>Auto-Add</button>
 
     return (
       <div>
         <h1>Shopping List</h1>
-          {items}
             <div>
               <label>
                 <input onChange={e => this.updateInput(e)}
                 value={this.state.name}/>
               </label>
               <button onClick={e => this.addItem()}>Add</button>
+              {items.length&&items||newBtn}
             </div>
       </div>
     );

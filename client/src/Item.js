@@ -22,6 +22,9 @@ class Item extends React.Component {
   delete() {
     return this.props.deleteItem(this.props.itemData);
   }
+  pushToNext(){
+    return this.props.pushItemToNextWeek(this.props.itemData)
+  }
 
   render() {
     
@@ -36,7 +39,6 @@ class Item extends React.Component {
                 <input value={item}/>
                 {/* <input onChange={e => this.updateInput(e)} value={item}/> */}
                 <button onClick={() => this.delete()}>Del</button>
-                <button>{status}</button>
               </label>
 
             </div>
