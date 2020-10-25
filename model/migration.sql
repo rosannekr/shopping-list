@@ -1,25 +1,27 @@
-CREATE TABLE `allItems` (
-	`itemId` INT NOT NULL AUTO_INCREMENT UNIQUE,
-	`dateCompleted` DATE,
+DROP TABLE if exists `items`;
+DROP TABLE if exists `weeks`;
+DROP TABLE if exists `products`;
+
+CREATE TABLE `items` (
+	`id` INT NOT NULL AUTO_INCREMENT UNIQUE,
+	`completed` DATE,
 	`weekId` INT NOT NULL,
 	`productID` INT NOT NULL,
-	PRIMARY KEY (`itemId`)
+	PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `Weeks` (
-	`weekId` INT NOT NULL AUTO_INCREMENT UNIQUE,
-	`weekStart` DATE NOT NULL,
-	`weekEnd` DATE NOT NULL,
-	PRIMARY KEY (`weekId`)
+CREATE TABLE `weeks` (
+	`id` INT NOT NULL AUTO_INCREMENT UNIQUE,
+	`start` DATE NOT NULL,
+	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `products` (
-	`ProductId` INT NOT NULL AUTO_INCREMENT UNIQUE,
-	`foodName` varchar(255) NOT NULL,
-	PRIMARY KEY (`ProductId`)
+	`id` INT NOT NULL AUTO_INCREMENT UNIQUE,
+	`name` varchar(255) NOT NULL,
+	PRIMARY KEY (`id`)
 );
 
-ALTER TABLE `allItems` ADD CONSTRAINT `allItems_fk0` FOREIGN KEY (`weekId`) REFERENCES `Weeks`(`weekId`);
+ALTER TABLE `items` ADD CONSTRAINT `items_fk0` FOREIGN KEY (`weekId`) REFERENCES `weeks`(`id`);
 
-ALTER TABLE `allItems` ADD CONSTRAINT `allItems_fk1` FOREIGN KEY (`productID`) REFERENCES `products`(`ProductId`);
-
+ALTER TABLE `items` ADD CONSTRAINT `items_fk1` FOREIGN KEY (`productID`) REFERENCES `products`(`id`);

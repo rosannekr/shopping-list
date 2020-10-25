@@ -1,0 +1,378 @@
+✔ Popcorn
+✔ Sliced cheese
+✔ Walnuts
+✔ Nice black tea (Carrefour?)
+✔ Real parmesan
+✔ Sausages
+✔ Carrots
+✔ Ricola
+✔ Milk
+✔ Onions
+✔ Ginger
+✔ Lactose free yogurt
+✔ Tin tomatoes
+✔ Kidney beans
+✔ Regular pasta
+✔ Normal pasta
+✔ Milk
+✔ Apples
+✔ Eggs
+✔ Chicken
+✔ Raisins
+✔ Seeds
+✔ Ginger
+✔ Yogurt
+✔ Pasta
+✔ Honey
+✔ Lemons
+✔ Onions
+✔ Milk
+✔ Decaf coffee
+✔ Milk
+✔ Lemon
+✔ Apple juice
+✔ Thermometer
+✔ Chicken
+✔ Yogurt
+✔ Beef
+✔ Edamame
+✔ Frozen pizzas
+✔ Milk
+✔ Popcorn
+✔ Apples
+✔ Potatoes
+✔ Paracetamol
+✔ Strepsil
+✔ Nose spray
+✔ Hair ties and pins
+✔ White wine ✭
+✔ Detergent ✭
+✔ Cucumber ✭
+✔ Gluten free pasta
+✔ Peanut butter
+✔ Non dairy yogurt
+✔ Tonic
+✔ Beef
+✔ Almonds x4
+✔ Walnut s, x4
+✔ Vegetable stock cubes
+✔ Rice, basmati or Jazmine
+✔ Hair conditioner
+✔ Nutella
+✔ Sensodyne toothpaste
+✔ Milk
+✔ Hotdogs
+✔ Sausages
+✔ Plant pesticides
+✔ Small pack of soil
+✔ Frozen green beans
+✔ Tomatoes
+✔ Potatoes
+✔ Meat
+✔ Spinach fresh or frozen
+✔ Onion
+✔ Bell peppers
+✔ Apples green
+✔ Test
+✔ Jdkd
+✔ Edamame frozen snack ✭
+✔ Lunch food
+✔ Vanilla ice cream
+✔ Avocados ✭
+✔ Lentils ✭
+✔ Bacon ✭
+✔ Cabbage ✭
+✔ Avocado
+✔ Calabacín ✭
+✔ Lactose free milk
+✔ Eggs ✭
+✔ Berenjena ✭
+✔ Pork loin ✭
+✔ Fruit
+✔ Bell pepper
+✔ Fresh or frozen parsley ✭
+✔ Yoghurt ✭
+✔ Gluten free pizza (4 cheese) ✭
+✔ Wax strips / Cera ✭
+✔ Snacks ✭
+✔ Chocolate peanuts ✭
+✔ Tonic ✭
+✔ Nice dark chocolate ✭
+✔ Cumin ✭
+✔ Cheddar ✭
+✔ Red wine vinegar ✭
+✔ Canned tomatoes entero + Frito ✭
+✔ Gin ✭
+✔ Semi milk ✭
+✔ White wine (arteso) ✭
+✔ Jar of kidney beans ✭
+✔ Apples ✭
+✔ Raspberry x2 ✭
+✔ If no raspberries, fruit salat ✭
+✔ Frozen berries ✭
+✔ White wine
+✔ Milk ✭
+✔ Big garbage bags ✭
+✔ Black pepper corns ✭
+✔ Yogurt ✭
+✔ Normal & Decaf Coffee ✭
+✔ Fish ✭
+✔ Frozen pizza ✭
+✔ Chicken ✭
+  ❏ Fruit
+✔ Walnuts ✭
+✔ Tortilla chips ✭
+✔ Ground beef ✭
+✔ Carrots ✭
+✔ Cucumber ✭
+✔ Frozen berries ✭
+✔ Microwave popcorn ✭
+✔ Eggs ✭
+✔ Yogurt ✭
+✔ Sandwhich cheese ✭
+✔ Ham for toast ✭
+✔ Gluten free corn flakes ✭
+✔ Almonds ✭
+✔ Toast bread ✭
+✔ Full fat milk ✭
+✔ Bell peppers ✭
+✔ Bread ✭
+✔ Cream cheese ✭
+✔ Cherry tomatoes ✭
+✔ Hummus ✭
+✔ Frozen fruit ✭
+✔ Yogurt ✭
+✔ Smoked salmon ✭
+✔ Sweet potato
+✔ Onion ✭
+✔ Carrots
+✔ Cucumber
+✔ Cherry tomatoes
+✔ Sausage ✭
+✔ Yogurt ✭
+✔ White beans ✭
+✔ White wine ✭
+✔ Mixed or chia seeds ✭
+✔ Full fat milk ✭
+✔ Frozen berries ✭
+✔ Ground beef ✭
+✔ Almonds ✭
+✔ Youghurt ✭
+✔ Frozen pizza ✭
+✔ White rice - jasmine or basmati ✭
+✔ Dishwasher tablets ✭
+✔ Salmon ✭
+✔ Olive oil ✭
+✔ Mosquito thing ✭
+✔ Milk ✭
+✔ Asperagus ✭
+✔ Lemons ✭
+✔ Cherry tomatoes ✭
+✔ Cucumbers ✭
+✔ Ground beef
+✔ Salad/wrap kit ✭
+✔ Brillador ✭
+✔ Juice ✭
+✔ Yogurt ✭
+✔ Fruit ✭
+✔ Onion ✭
+✔ Lotion
+✔ Frozen fish
+✔ Mayonnaise
+✔ Bell pepper
+✔ Frozen bell pepper
+✔ Feta cheese
+✔ Potatoes
+✔ Risotto rice
+✔ Mushrooms
+✔ White wine
+✔ Toilet paper
+✔ Espresso Coffee
+✔ Cucumber
+✔ Chocolate and junk food
+✔ Frozen shrimp
+✔ Toothpaste
+✔ Emergency lesagna ✭
+✔ Tonic ✭
+✔ Salad x2 ✭
+✔ Bananas ✭
+✔ Small peeling oranges ✭
+✔ Pork loin
+✔ Ground beef
+✔ Pasta cheese
+✔ Avocado
+✔ Berries
+✔ Yogurt
+✔ Milk ✭
+✔ Wine Arteso white x2 ✭
+✔ Laundry detergent
+✔ Eggs ✭
+✔ Empanada ✭
+✔ Chicken ✭
+✔ Frozen pizza x2 ✭
+✔ Yogurt ✭
+✔ Hummus ✭
+✔ Fruit ✭
+✔ Fresh tomatoes ✭
+✔ Cucumber ✭
+✔ Onion ✭
+✔ Empanada
+✔ Wall nuts
+✔ Nutella
+✔ Milk
+✔ Brown pasta for salad
+✔ 8+ eggs
+✔ Tuna
+✔ Yogurt
+✔ Sweet corn
+✔ Onions
+✔ Fruits
+✔ Cucumber
+✔ Tomato
+✔ Inkonsekvent
+✔ Suavizante
+✔ Friegasuelos
+✔ Lejia
+✔ Milk
+✔ Espresso coffee decaf
+✔ Ice cream
+✔ Nuts
+✔ Oranges
+✔ Garlic press
+✔ Shelves x2
+✔ Pots
+✔ Plants
+✔ Yellow zip bags
+✔ Kidney beans
+✔ Metal scrub
+✔ Dish soap
+✔ Toilet paper
+✔ A fruit
+✔ Smoked Salmon
+✔ Zip loc bags 2L or 3L
+✔ Kitchen paper
+✔ Frozen fish, empanada al huevo
+✔ Chicken breast
+✔ Cream cheese
+✔ Almonds
+✔ Walnuts
+✔ Yogurt
+✔ Bread
+✔ Not oranges
+✔ Lemon
+✔ Dill
+✔ Fresh basil
+✔ Salt for holiday apt
+✔ Dijon mustard
+✔ Feta
+✔ Lemons
+✔ Bread
+✔ Cream cheese
+✔ Vegetable / Salad
+✔ Salmon
+✔ Toothpaste for holiday apt guest bath
+✔ Dish soap
+✔ Yogurt
+✔ Jam to replace in holiday appt
+✔ Ground beef
+✔ tin tomatoes, small X2
+✔ Pasta
+✔ Eggs
+✔ Pasta cheese
+✔ Smoked salmon
+✔ Long life milk, 6 pack
+✔ K - olive oil
+✔ K - ice
+✔ K - Hummus
+✔ K - Milk, fresh
+✔ K - Cheddar
+✔ K - Gin
+✔ K - Edam cheese
+✔ K - Cherry tomat
+✔ K - Onions, any
+✔ Carrots
+✔ Cabbage
+✔ Bell peppers
+✔ Cucumber
+✔ Vegetables - courgette, aubergine?
+✔ Laundry detergent
+✔ Microwave popcorn
+✔ Breaded frozen fish- mercadona
+✔ Frozen shrimp
+✔ Cupboard juice for holiday apt
+✔ Wine
+✔ Frozen pizza
+✔ Lemons
+✔ Pork loin - carniceria
+✔ Walnuts
+✔ Minced beef
+✔ Chicken
+✔ Espresso Coffee
+✔ Cucumber
+✔ Cherry tomatoes
+✔ Pasta X 3
+✔ Mayonnaise
+✔ Salad cheese - supersol
+✔ Milk - supersol
+✔ sun dried tomatoes
+✔ Picture frame
+✔ Grater
+✔ eggs
+✔ tahini (they have it at aldi, otherwise ignore)
+✔ greek yogurt
+✔ sweetcorn, tin
+✔ chickpeas
+✔ nectarines or whatever fruit is cheapest and works with yogurt
+✔ spinach
+✔ onions
+✔ cucumbers
+✔ cherry tomat
+✔ bell peppers
+✔ eggplant
+✔ zucchini
+✔ Bottled Water
+✔ Bay leaves laurels
+✔ Spegetti
+✔ Tomato puree
+✔ Tomatoes tin x 2 entero/pelado
+✔ Chili / cayendo
+✔ Rosemary / Romero
+✔ Celery
+✔ Ibuprofen
+✔ Fenistil
+✔ Antihistamine
+✔ Mosquito repellent
+✔ Bleach
+✔ Nuts
+✔ Shrimp
+✔ Cooking Butter
+✔ Ground beef
+✔ Fresh Parsley
+✔ Fruits
+✔ Shallots
+✔ Potatoes
+✔ Carrots
+✔ Nice cream
+✔ Toothpaste
+✔ Avocado
+✔ Backpacks
+✔ Padel Equipment
+✔ Veg stock cubes
+✔ Paprika, spicy or sweet
+✔ Oregano, dried
+✔ Egg pasta, pref skinny ribbon shaped, like tagliatelle
+✔ Flour
+✔ Vinegar
+✔ Olive oil
+✔ Flatbread
+✔ Cabbage
+✔ Mushrooms
+✔ Cherry tomatoes
+✔ Nuts
+✔ Bread
+✔ Cherry tomatoes
+✔ Cucumber
+✔ Cherry Tomatoes
+✔ Cranberry Juice
+✔ Eggs
+✔ Potato
