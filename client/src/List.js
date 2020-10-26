@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import Item from "./Item";
 
-class CurrentList extends React.Component {
+class List extends React.Component {
   constructor(props) {
     super(props);
     this.updateInput= this.updateInput.bind(this)
@@ -52,8 +52,7 @@ class CurrentList extends React.Component {
       });
   }
   autoAdd() {
-    // add item to this week, but first add to products and
-    // week if not already there
+    // add most common items to current week, need to find way to add week though
     fetch("/currentApi/items/auto", {
       method: "POST",
       headers: {
@@ -140,4 +139,4 @@ class CurrentList extends React.Component {
   }
 }
 
-export default CurrentList;
+export default List;
