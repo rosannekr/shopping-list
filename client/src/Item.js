@@ -22,8 +22,9 @@ class Item extends React.Component {
   delete() {
     return this.props.deleteItem(this.props.itemData);
   }
-  pushToNext(){
-    return this.props.pushItemToNextWeek(this.props.itemData)
+  next(){
+    console.log("item data", this.props.itemData)
+    return this.props.pushToNext(this.props.itemData)
   }
 
   render() {
@@ -37,8 +38,8 @@ class Item extends React.Component {
               <label style={status ? { color: "GrayText" } : { color: "black" }}>
                 <input checked={status} className="checkBox" type="checkbox" onChange={() => this.setCompleted()} />
                 <input value={item}/>
-                {/* <input onChange={e => this.updateInput(e)} value={item}/> */}
                 <button onClick={() => this.delete()}>Del</button>
+                <button onClick={() => this.next()}>ToNext</button>
               </label>
 
             </div>

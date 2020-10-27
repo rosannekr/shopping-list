@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import Week from "./Week";
-import Item from "./Item";
+import PastItem from "./PastItem";
 
 class PastLists extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+          items: [],
           input: "",
           weeks: [],
-          items:[]
+          selectedWeek: 0
         };
       }
 
@@ -21,7 +22,8 @@ class PastLists extends React.Component {
         })
     }
     viewWeek(id) {
-      fetch(`/pastApi/weeks/:${id}`)
+      this.setState({selectedWeek: id});
+      fetch(`/pastApi/weeks/${id}`)
         .then(res => res.json())
         .then(json => {
           console.log("json",json)
@@ -30,22 +32,17 @@ class PastLists extends React.Component {
     }
 
     render() {
-      console.log(this.state.weeks.map(week => week.start.split("T")[0]))
-      const weeks = this.state.weeks.map(week => 
-        (
-          <Week key={week.id} weekData={week} weekStart={week.start.split("T")[0]} viewWeek={()=>this.viewWeek()}></Week>
+      const weeks = this.state.weeks.map(week => (
+          <Week key={week.id} weekData={week} weekStart={week.start.split("T")[0]} viewWeek={(id)=>this.viewWeek(id)}></Week>
         ))
-        const items = this.state.items.map(item => 
-          (
-            <Item
-              key={item.id}
-              itemData={item}
+      const items = this.state.items.map(item => (
+            <PastItem key={item.id} itemData={item}
             />
           ));
 
         return (
             <div>
-              {!!items.length&&items||weeks}      
+              {!!this.state.items.length && items || weeks}      
             </div>
         )
     }

@@ -3,8 +3,9 @@ import React, { Component } from 'react'
 export default class Week extends Component {
 
 view () {
-return this.props.viewWeek(this.props.weekData.id)
-}
+    let weekId = this.props.weekData.id
+    return this.props.viewWeek(weekId)
+    }
 
     render() {
         let start = this.props.weekStart

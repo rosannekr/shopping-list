@@ -70,7 +70,6 @@ class List extends React.Component {
   }
 
   updateItem(itemStatus) {
-    console.log("data sent back to parent")
 //update to completed
     fetch("/currentApi/items", {
       method: "PUT",
@@ -81,7 +80,6 @@ class List extends React.Component {
     })
       .then(res => res.json())
       .then(json => {
-        console.log("JSON data", json)
         this.setState({
           data: json
         });
@@ -105,8 +103,21 @@ class List extends React.Component {
       });
   }
   pushItemToNextWeek (pushed){
-    let item = pushed
-      //pushes item to next week's list
+    console.log("pushed", pushed)
+    fetch("/currentApi/items/auto/push", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(pushed)
+    })
+      .then(res => res.json())
+      .then(json => {
+        this.setState({
+          data: json
+        });
+      });
+    this.deleteItem(pushed)
   }
 
   render() {
@@ -118,7 +129,7 @@ class List extends React.Component {
         itemData={item}
         updateItem={itemStatus => this.updateItem(itemStatus)}
         deleteItem={unwanted => this.deleteItem(unwanted)}
-        pushToNext={item=>this.pushItemToNextWeek(item)}
+        pushToNext={pushed=> this.pushItemToNextWeek(pushed)}
       />
     ));
     let newBtn= <button onClick={e => this.autoAdd()}>Auto-Add</button>

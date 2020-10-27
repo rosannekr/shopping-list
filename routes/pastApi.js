@@ -15,6 +15,7 @@ router.get("/weeks", (req, res) => {
 });
 
 router.get("/weeks/:id", (req, res) => {
+  console.log("req.params", req.params)
   //show items for specific week
   db(`SELECT items.id, items.completed,products.name
   FROM items INNER JOIN products 
@@ -27,7 +28,7 @@ router.get("/weeks/:id", (req, res) => {
   });
 });
 
-router.post("/", (req, res) => {
+router.post("/addpast", (req, res) => {
   db(`SELECT items.id, items.completed,products.name
       FROM items INNER JOIN products 
       ON items.productId=products.id

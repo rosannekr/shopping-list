@@ -58,32 +58,5 @@ function Login() {
   return <h2>to be added at a later date</h2>;
 }
 
-//   let match = useRouteMatch();
-//   let weeks= []//map week ids to li objects 
-
-//   return (
-//     <div>
-//       <h2>Past Lists</h2>
-
-//       <ul>
-//         {weeks}
-//       </ul>
-//       <Switch>
-//         <Route path={`${match.path}/:weekId`}>
-//           <Topic />
-//         </Route>
-//         <Route path={match.path}>
-//           <h3>Select a list.</h3>
-//         </Route>
-//       </Switch>
-//     </div>
-//   );
-// }
-
-// function Topic() {
-//   let { weekId } = useParams();
-//   return <h3>Requested week ID: {topicId}</h3>;
-
-
 export default App;
 
