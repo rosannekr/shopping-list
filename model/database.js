@@ -16,16 +16,16 @@ const DB_NAME = process.env.DB_NAME;
 const con = mysql.createConnection({
   host: DB_HOST || "127.0.0.1",
   user: DB_USER || "root",
-  password: "1234",
-  database: "shopList",
+  password: DB_PASS,
+  database: DB_NAME,
   multipleStatements: true,
 });
 
-con.connect(function(err) {
+con.connect(function (err) {
   if (err) throw err;
   console.log("Connected!");
 
-  con.query(migrationSQL, function(err, result) {
+  con.query(migrationSQL, function (err, result) {
     if (err) throw err;
     console.log("Migration was completed");
   });
