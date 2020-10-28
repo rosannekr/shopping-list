@@ -1,11 +1,23 @@
 # shopList
-
 Set up:
 
-npm install
- 
+Create `.env` file in project directory and add
+```
+DB_NAME=todos
+DB_PASS=YOUR_PASSWORD
+```
+(replace `YOUR_PASSWORD` with password)
+Type `mysql -u root -p` to access the MySQL CLI using your password.
+In the MySQL CLI, type `create database shopList;` to create a database in MySQL.
+
+
+outside mysql, navegate to shoplist foleder, npm install
 to create database - node run mitrate
 to load seed data - node run seed 
+
+then "cd client" and "npm install"
+
+from separate terminals, "npm start" from both shoplist and client folders 
 
 
 To-do list
