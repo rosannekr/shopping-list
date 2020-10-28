@@ -11,6 +11,7 @@ import {
   useRouteMatch,
   useParams,
 } from "react-router-dom";
+import { NavBar } from "./NavBar";
 
 class App extends React.Component {
   constructor(props) {
@@ -20,21 +21,10 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="container">
-        <Router>
+      <Router>
+        <NavBar />
+        <div className="container">
           <div>
-            <ul>
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-              <li>
-                <Link to="/currentList">Current List</Link>
-              </li>
-              <li>
-                <Link to="/pastList">Past Lists</Link>
-              </li>
-            </ul>
-
             <Switch>
               <Route path="/currentList">
                 <List />
@@ -47,8 +37,8 @@ class App extends React.Component {
               </Route>
             </Switch>
           </div>
-        </Router>
-      </div>
+        </div>
+      </Router>
     );
   }
 }
