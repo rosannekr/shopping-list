@@ -2,16 +2,19 @@ var express = require("express");
 var router = express.Router();
 const bodyParser = require("body-parser");
 const db = require("../model/helper");
-require("dotenv").config();
+
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 const supersecret = process.env.SUPER_SECRET;
+
+const userMustBeLoggedIn = require("./userMustBeLoggedIn");
 
 router.use(bodyParser.json());
 
-router.get("/", async (req, res) => {
-  const results = await db(`SELECT * FROM users`);
+router.get("/profile", userMustBeLoggedIn, (req, res) => {
+  console.log(req.decoded);
 
-  res.send(results.data);
+  res.send({ message: "data" });
 });
 
 router.post("/login", async (req, res) => {
@@ -30,9 +33,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  await db(`INSERT INTO users (username, password) VALUES ("test", "test")`);
-  res.send("User registered");
-});
+// router.post("/", async (req, res) => {
+//   await db(`INSERT INTO users (username, password) VALUES ("test", "test")`);
+//   res.send("User registered");
+// });
 
 module.exports = router;

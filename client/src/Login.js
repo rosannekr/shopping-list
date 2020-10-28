@@ -11,11 +11,17 @@ function Login() {
     try {
       // send login credentials to back end
       const res = await axios.post("/users/login", { username, password });
-      console.log(res);
+      // store token on user's device
+      localStorage.setItem("token", res.data.token);
     } catch (error) {
       console.log(error);
     }
   };
+
+  //   const requestData = () => {
+  //       // send token in header
+  //       const res = await axios.get("/users/profile", { })
+  //   }
 
   return (
     <div className="text-center">
