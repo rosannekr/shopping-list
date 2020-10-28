@@ -11,9 +11,9 @@ router.get("/", (req, res) => {
 
 router.get("/items", (req, res) => {
   //select items from current week
-  db(`SELECT items.id, items.completed,products.name
-    FROM items INNER JOIN products 
-    ON items.productId=products.id
+  db(`SELECT items.id, items.completed,products.name FROM items 
+    INNER JOIN products ON items.productId=products.id
+
     WHERE items.weekId=(SELECT id FROM weeks
     WHERE weeks.start=DATE_SUB(CURDATE(),
     INTERVAL DAYOFWEEK(CURDATE())-2 DAY));`)
@@ -25,7 +25,7 @@ router.get("/items", (req, res) => {
 
 router.post("/items", (req, res) => {
   //add item name to products if not there
-  //and add item instance to items
+  //and add item instance to this week's items 
   //return list for the week
   db(`INSERT INTO products (name)
   SELECT '${req.body.name}'
@@ -50,22 +50,24 @@ router.post("/items", (req, res) => {
 });
 
 router.post("/items/auto", async (req, res) => {
+  //add current week if does not exist
   try {
-  //add common items, return week list
    await db(`INSERT INTO weeks (start)
   SELECT DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY) 
   WHERE NOT EXISTS (SELECT * FROM weeks 
   WHERE start= DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY));
   `)
-  
+  //insert common items as this week if not already in this week 
   await db(`INSERT INTO items (productId, weekId)
 	SELECT products.id, weeks.id 
   FROM products, weeks
+
   WHERE products.id IN (SELECT productId 
   FROM items GROUP BY productId
-  HAVING (SELECT count(productId)) >4
+  HAVING (SELECT count(productId)) > 4
   ORDER BY COUNT(productId) DESC)
   AND start=DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY)
+
   AND products.id NOT IN(
   SELECT products.id
   FROM products INNER JOIN items 
@@ -74,6 +76,7 @@ router.post("/items/auto", async (req, res) => {
   WHERE weeks.start=DATE_SUB(CURDATE(),
   INTERVAL DAYOFWEEK(CURDATE())-2 DAY)));`)
 
+  //return this week's items
   const results = await db(`SELECT items.id, items.completed,products.name
       FROM items INNER JOIN products 
       ON items.productId=products.id
@@ -90,16 +93,18 @@ router.post("/items/auto", async (req, res) => {
 });
 
 router.post("/items/auto/push", async (req, res) => {
-  //add common items, return week list
+  //create next week if not exists, add item to next week
   await db(`INSERT INTO weeks (start) SELECT DATE_ADD(
     DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY),INTERVAL 1 week)
     WHERE NOT EXISTS (SELECT * FROM weeks WHERE start= 
     DATE_ADD(DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY),INTERVAL 1 week));
+
     INSERT INTO items (weekid, productid)
     SELECT weeks.id, products.id FROM weeks, products
     WHERE start=DATE_ADD(DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY),INTERVAL 1 week)
     AND name='${req.body.name}';`)
-
+    
+  //return this week 
   const results = await db(`SELECT items.id, items.completed,products.name
       FROM items INNER JOIN products 
       ON items.productId=products.id
@@ -111,7 +116,7 @@ router.post("/items/auto/push", async (req, res) => {
 });
 
 router.put("/items", (req, res) => {
-  //update completed items and return list
+  //set completed for selected item to current date and return this week
   db(`  UPDATE items set completed=${req.body.completed}
   WHERE productId=(SELECT products.id FROM products
   WHERE name='${req.body.name}')
@@ -134,7 +139,7 @@ router.put("/items", (req, res) => {
 });
 
 router.delete("/items", (req, res) => {
-  //delete selected item
+  //delete selected item from current week 
   db(`DELETE FROM items WHERE id = ${req.body.id};`)
 
     .catch(err => res.status(500).send(err))
