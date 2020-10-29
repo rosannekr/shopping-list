@@ -7,7 +7,6 @@ class List extends React.Component {
   constructor(props) {
     super(props);
     this.updateInput = this.updateInput.bind(this);
-    this.componentDidMount = this.componentDidMount.bind(this);
     this.state = {
       input: "",
       data: [],
@@ -24,7 +23,8 @@ class List extends React.Component {
   async componentDidMount() {
     // res is initially empty
     const res = await getItems();
-    console.log(res.data);
+    console.log("data in componentdidmount", res.data);
+    console.log("token in componentdidmount", localStorage.getItem("token"));
 
     this.setState({ data: res.data });
 
@@ -122,7 +122,7 @@ class List extends React.Component {
 
   render() {
     let data = this.state.data;
-    let items = data.map((item) => (
+    let items = data?.map((item) => (
       <Item
         key={item.id}
         itemData={item}

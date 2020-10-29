@@ -11,27 +11,16 @@ function LoginPage() {
     e.preventDefault();
 
     try {
-      // request a token (send login credentials to back end)
+      // request a token (send user info to back end)
       const res = await getToken(username, password);
       // store token on user's device
       localStorage.setItem("token", res.data.token);
-      // redirect user to home route
+      // redirect user to home page
       history.push("/");
     } catch (error) {
       console.log(error.message);
     }
   };
-
-  /* FOR TESTING */
-  // const requestData = async () => {
-  //   try {
-  //     // request protected data, send token in header
-  //     const res = await getData();
-  //     console.log("your data", res);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // };
 
   return (
     <div className="text-center">

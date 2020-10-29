@@ -2,12 +2,10 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const supersecret = process.env.SUPER_SECRET;
 
-// Use throw new error here?
-
 // authorization
 function userMustBeLoggedIn(req, res, next) {
   // grab token from header in request
-  const token = req.headers["x-access-token"];
+  const token = req.headers["authorization"];
 
   if (!token) {
     res.status(401).send({ message: "Provide a token" });

@@ -1,10 +1,9 @@
-import { useHistory } from "react-router-dom";
-const axios = require("axios");
+import axios from "axios";
 
 /* Configuration */
 
 // Send header with token in every request
-axios.defaults.headers.common["x-access-token"] = localStorage.getItem("token");
+axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
 
 // Intercept 401 unauthorized responses
 axios.interceptors.response.use(
@@ -18,9 +17,7 @@ axios.interceptors.response.use(
       // Request to access home page?
       console.log("redirecting");
       localStorage.removeItem("token");
-      // redirect user to login route
-      const history = useHistory();
-      history.push("/login");
+      // redirect user to login route, can't use hook
     }
     return error;
   }
@@ -48,5 +45,7 @@ export const getToken = async (username, password) => {
 
 // Get items
 export const getItems = async () => {
+  console.log("token in request", localStorage.getItem("token"));
+
   return await axios.get("/currentApi/items");
 };
