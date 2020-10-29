@@ -1,17 +1,12 @@
 import React from "react";
 import "./App.css";
-import List from "./List";
-import PastLists from "./PastLists";
-import Login from "./Login";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useRouteMatch,
-  useParams,
-} from "react-router-dom";
-import { NavBar } from "./NavBar";
+import List from "./components/List";
+import PastLists from "./components/PastLists";
+import LoginPage from "./components/LoginPage";
+import RegisterPage from "./components/RegisterPage";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { NavBar } from "./components/NavBar";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 class App extends React.Component {
   constructor(props) {
@@ -32,9 +27,15 @@ class App extends React.Component {
               <Route path="/pastList">
                 <PastLists />
               </Route>
-              <Route path="/">
-                <Login />
+              <Route path="/register">
+                <RegisterPage />
               </Route>
+              <Route path="/login">
+                <LoginPage />
+              </Route>
+              <ProtectedRoute path="/">
+                <List />
+              </ProtectedRoute>
             </Switch>
           </div>
         </div>

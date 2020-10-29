@@ -2,6 +2,9 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const supersecret = process.env.SUPER_SECRET;
 
+// Use throw new error here?
+
+// authorization
 function userMustBeLoggedIn(req, res, next) {
   // grab token from header in request
   const token = req.headers["x-access-token"];
@@ -9,10 +12,11 @@ function userMustBeLoggedIn(req, res, next) {
   if (!token) {
     res.status(401).send({ message: "Provide a token" });
   } else {
-    // verify token
+    // check if token is valid
     jwt.verify(token, supersecret, function (err, decoded) {
-      if (err) res.status(401).send(err);
-      else {
+      if (err) {
+        res.status(401).send(err.message);
+      } else {
         req.decoded = decoded;
         next();
       }
@@ -20,4 +24,4 @@ function userMustBeLoggedIn(req, res, next) {
   }
 }
 
-module.export = userMustBeLoggedIn;
+module.exports = userMustBeLoggedIn;

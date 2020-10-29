@@ -1,31 +1,42 @@
 import React, { useState } from "react";
-const axios = require("axios");
+import { useHistory } from "react-router-dom";
+import { getToken } from "../services/requests";
 
-function Login() {
+function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const history = useHistory();
 
   const handleClick = async (e) => {
     e.preventDefault();
 
     try {
-      // send login credentials to back end
-      const res = await axios.post("/users/login", { username, password });
+      // request a token (send login credentials to back end)
+      const res = await getToken(username, password);
       // store token on user's device
       localStorage.setItem("token", res.data.token);
+      // redirect user to home route
+      history.push("/");
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 
-  //   const requestData = () => {
-  //       // send token in header
-  //       const res = await axios.get("/users/profile", { })
+  /* FOR TESTING */
+  // const requestData = async () => {
+  //   try {
+  //     // request protected data, send token in header
+  //     const res = await getData();
+  //     console.log("your data", res);
+  //   } catch (error) {
+  //     console.log(error.message);
   //   }
+  // };
 
   return (
     <div className="text-center">
-      <form className="w-25 mx-auto">
+      <h2>Log In</h2>
+      <form className="w-25 mx-auto mt-2">
         <input
           className="form-control"
           type="text"
@@ -35,7 +46,7 @@ function Login() {
         />
         <input
           className="form-control mt-2"
-          type="text"
+          type="password"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
@@ -48,4 +59,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;
