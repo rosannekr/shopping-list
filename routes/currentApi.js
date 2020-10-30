@@ -12,7 +12,7 @@ router.get("/items", userMustBeLoggedIn, async (req, res) => {
   try {
     const results = await db(`SELECT items.id, items.completed,products.name FROM items 
     INNER JOIN products ON items.productId=products.id WHERE items.weekId=(SELECT id FROM weeks
-    WHERE weeks.start=DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY));`);
+    WHERE weeks.start=DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY)) AND userId = ${req.decoded.user_id};`);
 
     res.send(results.data);
   } catch (error) {
