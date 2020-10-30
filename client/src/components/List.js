@@ -1,31 +1,27 @@
 import React from "react";
 import "../App.css";
 import Item from "./Item";
-import { getItems } from "../services/requests";
+import { getItems } from "../services/api";
 
 class List extends React.Component {
   constructor(props) {
     super(props);
-    this.updateInput = this.updateInput.bind(this);
     this.state = {
       input: "",
       data: [],
     };
   }
 
-  updateInput(e) {
+  updateInput = (e) => {
     e.preventDefault();
     this.setState({
       input: e.target.value,
     });
-  }
+  };
 
   async componentDidMount() {
-    // res is initially empty
+    // res is initially empty?
     const res = await getItems();
-    console.log("data in componentdidmount", res.data);
-    console.log("token in componentdidmount", localStorage.getItem("token"));
-
     this.setState({ data: res.data });
 
     // .catch((error) => {

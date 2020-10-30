@@ -1,9 +1,28 @@
 import axios from "axios";
+import { Redirect } from "react-router-dom";
 
 /* Configuration */
 
-// Send header with token in every request
-axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+// Not working
+// axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+
+// Do something before request is sent
+axios.interceptors.request.use(
+  (config) => {
+    // Grab token
+    const token = localStorage.getItem("token");
+
+    // Add header with token to every request
+    if (token != null) {
+      config.headers.Authorization = token;
+    }
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
 
 // Intercept 401 unauthorized responses
 axios.interceptors.response.use(
@@ -12,24 +31,16 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    // if user is not authorized, redirect to login page
+    // if user is not authorized, remove token and redirect to login page
     if (error.response.status === 401) {
-      // Request to access home page?
-      console.log("redirecting");
       localStorage.removeItem("token");
-      // redirect user to login route, can't use hook
+      <Redirect to="/login" />;
     }
     return error;
   }
 );
 
 /* Fetch requests */
-
-// for testing
-export const getData = async () => {
-  // Request protected data, send token in header
-  return await axios.get("/users/profile");
-};
 
 // Register
 export const addUser = async (username, password) => {
@@ -45,7 +56,5 @@ export const getToken = async (username, password) => {
 
 // Get items
 export const getItems = async () => {
-  console.log("token in request", localStorage.getItem("token"));
-
   return await axios.get("/currentApi/items");
 };

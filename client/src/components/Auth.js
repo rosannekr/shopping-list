@@ -1,3 +1,3 @@
-export const isLoggedIn = () => {
+export const userIsLoggedIn = () => {
   return localStorage.getItem("token") ? true : false;
 };

@@ -8,6 +8,7 @@ CREATE TABLE `items` (
 	`completed` DATE,
 	`weekId` INT NOT NULL,
 	`productID` INT NOT NULL,
+	`userId` INT NOT NULL DEFAULT '1',
 	PRIMARY KEY (`id`)
 );
 
@@ -33,3 +34,5 @@ CREATE TABLE `users`(
 ALTER TABLE `items` ADD CONSTRAINT `items_fk0` FOREIGN KEY (`weekId`) REFERENCES `weeks`(`id`);
 
 ALTER TABLE `items` ADD CONSTRAINT `items_fk1` FOREIGN KEY (`productID`) REFERENCES `products`(`id`);
+
+ALTER TABLE `items` ADD CONSTRAINT `items_fk2` FOREIGN KEY (`userId`) REFERENCES `users`(`id`);

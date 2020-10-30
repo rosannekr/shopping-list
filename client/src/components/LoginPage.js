@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { getToken } from "../services/requests";
+import { getToken } from "../services/api";
 
-function LoginPage() {
+function LoginPage(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
@@ -15,6 +15,8 @@ function LoginPage() {
       const res = await getToken(username, password);
       // store token on user's device
       localStorage.setItem("token", res.data.token);
+      // call login method to set state in App component
+      props.login();
       // redirect user to home page
       history.push("/");
     } catch (error) {
