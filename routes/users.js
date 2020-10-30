@@ -81,7 +81,7 @@ router.get("/profile", userMustBeLoggedIn, async (req, res) => {
     const results = await db(
       `SELECT username FROM users WHERE id = ${req.decoded.user_id}`
     );
-    res.send({ message: "Your data", data: results.data[0] });
+    res.send(results.data[0]);
   } catch (error) {
     res.status(401).send({ message: error.message });
   }

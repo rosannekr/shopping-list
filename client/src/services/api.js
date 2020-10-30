@@ -54,6 +54,11 @@ export const getToken = async (username, password) => {
   return await axios.post("/users/login", { username, password });
 };
 
+// Get user info
+export const getUser = async () => {
+  return await axios.get("/users/profile");
+};
+
 // Get items
 export const getItems = async () => {
   return await axios.get("/currentApi/items");

@@ -7,18 +7,17 @@ const userMustBeLoggedIn = require("../guards/userMustBeLoggedIn");
 
 router.use(bodyParser.json());
 
-router.get("/items", userMustBeLoggedIn, (req, res) => {
+router.get("/items", userMustBeLoggedIn, async (req, res) => {
   //select items from current week
-  db(`SELECT items.id, items.completed,products.name FROM items 
-    INNER JOIN products ON items.productId=products.id
+  try {
+    const results = await db(`SELECT items.id, items.completed,products.name FROM items 
+    INNER JOIN products ON items.productId=products.id WHERE items.weekId=(SELECT id FROM weeks
+    WHERE weeks.start=DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY));`);
 
-    WHERE items.weekId=(SELECT id FROM weeks
-    WHERE weeks.start=DATE_SUB(CURDATE(),
-    INTERVAL DAYOFWEEK(CURDATE())-2 DAY));`)
-    .then((results) => {
-      res.send(results.data);
-    })
-    .catch((err) => res.status(500).send(err));
+    res.send(results.data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 router.post("/items", (req, res) => {

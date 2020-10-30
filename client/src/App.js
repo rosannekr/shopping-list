@@ -8,11 +8,12 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { NavBar } from "./components/NavBar";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { userIsLoggedIn } from "./components/Auth";
+import { getUser } from "./services/api";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loggedIn: false };
+    this.state = { loggedIn: false, username: "" };
   }
 
   componentDidMount() {
@@ -20,8 +21,11 @@ class App extends React.Component {
     this.setState({ loggedIn });
   }
 
-  login = () => {
-    this.setState({ loggedIn: true });
+  login = async () => {
+    const res = await getUser();
+    console.log(res.data.username);
+
+    this.setState({ loggedIn: true, username: res.data.username });
   };
 
   logout = () => {
@@ -35,6 +39,11 @@ class App extends React.Component {
         <NavBar loggedIn={this.state.loggedIn} logout={this.logout} />
         <div className="container">
           <div>
+            {this.state.loggedIn && (
+              <h2 className="text-capitalize">
+                Welcome, {this.state.username}
+              </h2>
+            )}
             <Switch>
               <ProtectedRoute path="/pastList">
                 <PastLists />

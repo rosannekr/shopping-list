@@ -118,7 +118,7 @@ class List extends React.Component {
 
   render() {
     let data = this.state.data;
-    let items = data?.map((item) => (
+    let items = data.map((item) => (
       <Item
         key={item.id}
         itemData={item}
