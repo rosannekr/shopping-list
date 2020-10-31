@@ -1,7 +1,7 @@
 import React from "react";
 import "../App.css";
 import Item from "./Item";
-import { getItems } from "../services/api";
+import { getItems, addItem } from "../services/api";
 
 class List extends React.Component {
   constructor(props) {
@@ -13,40 +13,41 @@ class List extends React.Component {
   }
 
   updateInput = (e) => {
-    e.preventDefault();
     this.setState({
       input: e.target.value,
     });
   };
 
   async componentDidMount() {
-    // res is initially empty?
-    const res = await getItems();
-    this.setState({ data: res.data });
+    // TODO
+    // if current week exists: show items of current week
+    // otherwise show suggestions
 
-    // .catch((error) => {
-    //   fetch("currentApi/new/week").then((res) => res.json);
-    // });
+    // get items of current week
+    try {
+      const res = await getItems();
+      this.setState({ data: res.data });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  addItem() {
+  handleAdd = async (e) => {
+    e.preventDefault();
     // add item to this week, but first add to products and
     // week if not already there
-    fetch("/currentApi/items", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name: this.state.input }),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        console.log(json);
-        this.setState({
-          data: json,
-        });
+    try {
+      await addItem(this.state.input);
+      const res = await getItems();
+      this.setState({
+        data: res.date,
+        input: "",
       });
-  }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   autoAdd() {
     // add most common items to current week, need to find way to add week though
     fetch("/currentApi/items/auto", {
@@ -133,13 +134,18 @@ class List extends React.Component {
       <div>
         <h1>Shopping List</h1>
         <div>
-          <label>
+          <form className="form-inline justify-content-center mb-3">
             <input
-              onChange={(e) => this.updateInput(e)}
-              value={this.state.name}
+              className="form-control mr-1"
+              onChange={this.updateInput}
+              value={this.state.input}
+              placeholder="New item..."
             />
-          </label>
-          <button onClick={(e) => this.addItem()}>Add</button>
+            <button className="btn btn-primary" onClick={this.handleAdd}>
+              Add
+            </button>
+          </form>
+          <h3>Suggestions:</h3>
           {(items.length && items) || newBtn}
         </div>
       </div>

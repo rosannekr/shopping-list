@@ -63,3 +63,8 @@ export const getUser = async () => {
 export const getItems = async () => {
   return await axios.get("/currentApi/items");
 };
+
+// Add item
+export const addItem = async (name) => {
+  return await axios.post("/currentApi/items", { name });
+};

@@ -37,10 +37,10 @@ class App extends React.Component {
     return (
       <Router>
         <NavBar loggedIn={this.state.loggedIn} logout={this.logout} />
-        <div className="container">
+        <div className="container text-center">
           <div>
             {this.state.loggedIn && (
-              <h2 className="text-capitalize">
+              <h2 className="text-capitalize text-left">
                 Welcome, {this.state.username}
               </h2>
             )}
