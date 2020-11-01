@@ -21,7 +21,7 @@ router.get("/items", userMustBeLoggedIn, async (req, res) => {
 
     // If no results, generate new items
     if (!results.data.length) {
-      // Create new week (or skip if it already exists)
+      // Add new week (or skip if it already exists)
       await db(`INSERT IGNORE INTO weeks (start) VALUES (${monday});`);
 
       // Get id's of most frequently bought products
@@ -77,84 +77,19 @@ router.get("/suggestions", userMustBeLoggedIn, async (req, res) => {
 /* Add new item to this week's shopping list */
 router.post("/items", userMustBeLoggedIn, async (req, res) => {
   try {
-    // Check if current week is in database
-    const resultsWeek = await db(
-      `SELECT id FROM weeks WHERE start = ${monday};`
-    );
+    // Add new product to database (or skip if it already exists)
+    await db(`INSERT IGNORE INTO products (name) VALUES ("${req.body.name}");`);
 
-    // Add new week if it's not there
-    if (!resultsWeek.data.length) {
-      await db(`INSERT INTO weeks (start) VALUES (${monday});`);
-    }
-
-    // Check if product is in database
-    const resultsProduct = await db(
-      `SELECT id FROM products WHERE name = "${req.body.name}";`
-    );
-
-    // Add new product if it's not there
-    if (!resultsProduct.data.length) {
-      await db(`INSERT INTO products (name) VALUES ("${req.body.name}");`);
-    }
-
-    // Assign weekId and productId to result of earlier queries or a nested query
-    const weekId = resultsWeek.data.length
-      ? resultsWeek.data[0].id
-      : `(SELECT id FROM weeks WHERE start = ${monday})`;
-
-    const productId = resultsProduct.data.length
-      ? resultsProduct.data[0].id
-      : `(SELECT id FROM products WHERE name = "${req.body.name}")`;
+    // Save query for product id
+    const productId = `(SELECT id FROM products WHERE name = "${req.body.name}")`;
 
     // Add item to items table
     await db(
-      `INSERT INTO items (weekId, productId, userId) VALUES (${weekId}, ${productId}, ${req.decoded.user_id});`
+      `INSERT INTO items (weekId, productId, userId) VALUES (${thisWeekId}, ${productId}, ${req.decoded.user_id});`
     );
     res.send("Item added");
   } catch (error) {
     res.status(500).send(error);
-  }
-});
-
-router.post("/items/auto", async (req, res) => {
-  //add current week if does not exist
-  try {
-    await db(`INSERT INTO weeks (start)
-  SELECT DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY) 
-  WHERE NOT EXISTS (SELECT * FROM weeks 
-  WHERE start= DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY));
-  `);
-    //insert common items as this week if not already in this week
-    await db(`INSERT INTO items (productId, weekId)
-	SELECT products.id, weeks.id 
-  FROM products, weeks
-
-  WHERE products.id IN (SELECT productId 
-  FROM items GROUP BY productId
-  HAVING (SELECT count(productId)) > 4
-  ORDER BY COUNT(productId) DESC)
-  AND start=DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY)
-
-  AND products.id NOT IN(
-  SELECT products.id
-  FROM products INNER JOIN items 
-  ON products.id = items.productId
-  WHERE items.weekId=(SELECT id FROM weeks
-  WHERE weeks.start=DATE_SUB(CURDATE(),
-  INTERVAL DAYOFWEEK(CURDATE())-2 DAY)));`);
-
-    //return this week's items
-    const results = await db(`SELECT items.id, items.completed,products.name
-      FROM items INNER JOIN products 
-      ON items.productId=products.id
-      WHERE items.weekId=(SELECT id FROM weeks
-      WHERE weeks.start=DATE_SUB(CURDATE(),
-      INTERVAL DAYOFWEEK(CURDATE())-2 DAY));`);
-
-    res.send(results.data);
-  } catch (err) {
-    console.log(err);
-    res.status(500).send(err);
   }
 });
 
@@ -181,45 +116,53 @@ router.post("/items/auto/push", async (req, res) => {
   res.send(results.data);
 });
 
-router.put("/items", (req, res) => {
-  //set completed for selected item to current date and return this week
-  db(`  UPDATE items set completed=${req.body.completed}
-  WHERE productId=(SELECT products.id FROM products
-  WHERE name='${req.body.name}')
-  AND weekid=(SELECT id FROM weeks
-  WHERE weeks.start=DATE_SUB(CURDATE(),
-  INTERVAL DAYOFWEEK(CURDATE())-2 DAY));`)
-    .catch((err) => res.status(500).send(err))
+/* Update item */
+// Changed this to use url param
+router.put("/items/:id", userMustBeLoggedIn, async (req, res) => {
+  try {
+    if (req.query.prop === "weekId") {
+      // Save query to get current week
+      const currentWeek = `SELECT start FROM weeks WHERE id = (SELECT weekId FROM items WHERE id = ${req.params.id})`;
 
-    .then(() =>
-      db(`SELECT items.id, items.completed,products.name
-    FROM items INNER JOIN products 
-    ON items.productId=products.id
-    WHERE items.weekId=(SELECT id FROM weeks
-    WHERE weeks.start=DATE_SUB(CURDATE(),
-    INTERVAL DAYOFWEEK(CURDATE())-2 DAY));`)
-    )
-    .then((results) => {
-      res.send(results.data);
-    })
-    .catch((err) => res.status(500).send(err));
+      // Add next week (or skip if it already exists)
+      await db(
+        `INSERT IGNORE INTO weeks (start) VALUES (DATE_ADD(${currentWeek}, INTERVAL 1 WEEK));`
+      );
+
+      // Save query to get id of next week
+      const weekId = `(SELECT id FROM weeks WHERE start = DATE_ADD(${currentWeek}, INTERVAL 1 WEEK))`;
+
+      await db(
+        `UPDATE items set ${req.query.prop} = ${weekId} WHERE id = ${req.params.id};`
+      );
+    }
+
+    // Check current status
+    // if (!req.body.status) {
+    //   await db(
+    //     `UPDATE items set completed = CURDATE() WHERE id = ${req.params.id};`
+    //   );
+    // } else {
+    //   await db(
+    //     `UPDATE items set completed = NULL WHERE id = ${req.params.id};`
+    //   );
+    // }
+
+    res.send("Item updated");
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
-router.delete("/items", (req, res) => {
-  //delete selected item from current week
-  db(`DELETE FROM items WHERE id = ${req.body.id};`)
-    .catch((err) => res.status(500).send(err))
-
-    .then(() =>
-      db(`SELECT items.id, items.completed,products.name
-    FROM items INNER JOIN products 
-    ON items.productId=products.id
-    WHERE items.weekId=(SELECT id FROM weeks
-    WHERE weeks.start=DATE_SUB(CURDATE(),
-    INTERVAL DAYOFWEEK(CURDATE())-2 DAY));`).then((results) => {
-        res.send(results.data);
-      })
-    );
+/* Delete item from current week */
+// Changed this to use url param
+router.delete("/items/:id", userMustBeLoggedIn, async (req, res) => {
+  try {
+    await db(`DELETE FROM items WHERE id = ${req.params.id}`);
+    res.send("Item deleted");
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 module.exports = router;

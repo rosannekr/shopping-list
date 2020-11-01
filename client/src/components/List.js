@@ -1,7 +1,7 @@
 import React from "react";
 import "../App.css";
 import Item from "./Item";
-import { getItems, addItem } from "../services/api";
+import { getItems, addItem, deleteItem, updateItem } from "../services/api";
 
 class List extends React.Component {
   constructor(props) {
@@ -19,10 +19,6 @@ class List extends React.Component {
   };
 
   async componentDidMount() {
-    // TODO
-    // if current week exists: show items of current week
-    // otherwise show suggestions
-
     // get items of current week
     try {
       const res = await getItems();
@@ -40,7 +36,7 @@ class List extends React.Component {
       await addItem(this.state.input);
       const res = await getItems();
       this.setState({
-        data: res.date,
+        data: res.data,
         input: "",
       });
     } catch (error) {
@@ -48,87 +44,44 @@ class List extends React.Component {
     }
   };
 
-  autoAdd() {
-    // add most common items to current week, need to find way to add week though
-    fetch("/currentApi/items/auto", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name: this.state.input }),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        console.log(json);
-        this.setState({
-          data: json,
-        });
-      });
-  }
-
-  updateItem(itemStatus) {
+  updateItem = async (id, status) => {
     //update to completed
-    fetch("/currentApi/items", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(itemStatus),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        this.setState({
-          data: json,
-        });
+    try {
+      await updateItem(id, "completed");
+      const res = await getItems();
+      this.setState({
+        data: res.data,
       });
-  }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  deleteItem(unwanted) {
-    //remove item from week. does not remove existence
-    fetch(`/currentApi/items`, {
-      method: "Delete",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(unwanted),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        this.setState({
-          data: json,
-        });
+  deleteItem = async (id) => {
+    //remove item from week (does not remove existence)
+    try {
+      await deleteItem(id);
+      const res = await getItems();
+      this.setState({
+        data: res.data,
       });
-  }
-  pushItemToNextWeek(pushed) {
-    console.log("pushed", pushed);
-    fetch("/currentApi/items/auto/push", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(pushed),
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        this.setState({
-          data: json,
-        });
-      });
-    this.deleteItem(pushed);
-  }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  pushToNextWeek = async (item) => {
+    //move item to next week's list
+    try {
+      await updateItem(item.id, "weekId");
+      this.deleteItem(item.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   render() {
     let data = this.state.data;
-    let items = data.map((item) => (
-      <Item
-        key={item.id}
-        itemData={item}
-        updateItem={(itemStatus) => this.updateItem(itemStatus)}
-        deleteItem={(unwanted) => this.deleteItem(unwanted)}
-        pushToNext={(pushed) => this.pushItemToNextWeek(pushed)}
-      />
-    ));
-    let newBtn = <button onClick={(e) => this.autoAdd()}>Auto-Add</button>;
 
     return (
       <div>
@@ -145,8 +98,18 @@ class List extends React.Component {
               Add
             </button>
           </form>
-          <h3>Suggestions:</h3>
-          {(items.length && items) || newBtn}
+
+          <div className="list-group d-inline-block">
+            {data.map((item) => (
+              <Item
+                key={item.id}
+                item={item}
+                deleteItem={this.deleteItem}
+                updateItem={this.updateItem}
+                pushToNextWeek={this.pushToNextWeek}
+              />
+            ))}
+          </div>
         </div>
       </div>
     );

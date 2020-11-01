@@ -46,9 +46,6 @@ class App extends React.Component {
               </h2>
             )}
             <Switch>
-              {/* <ProtectedRoute path="/currentList">
-                <List />
-              </ProtectedRoute> */}
               <ProtectedRoute path="/pastList">
                 <PastLists />
               </ProtectedRoute>
@@ -59,7 +56,7 @@ class App extends React.Component {
                 <LoginPage login={this.login} />
               </Route>
               <ProtectedRoute exact path="/">
-                <HomePage />
+                <List />
               </ProtectedRoute>
             </Switch>
           </div>

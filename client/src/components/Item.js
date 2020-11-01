@@ -4,53 +4,51 @@ class Item extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // isChecked: !!this.props.itemData.completed,
-      isChecked: false,
+      isChecked: !!this.props.item.completed,
     };
   }
 
-  setCompleted() {
-    console.log("clicked!");
-    // let itemStatus = { ...this.props.itemData };
-    // itemStatus.completed = !itemStatus.completed ? "CURDATE()" : "null";
-    // console.log("itemStatus", itemStatus);
+  complete(id, status) {
     this.setState({
       isChecked: !this.state.isChecked,
     });
-    // return this.props.updateItem(itemStatus);
+    this.props.updateItem(id, status);
   }
 
-  delete() {
-    // return this.props.deleteItem(this.props.itemData);
+  delete(id) {
+    this.props.deleteItem(id);
   }
-  next() {
-    // console.log("item data", this.props.itemData);
-    // return this.props.pushToNext(this.props.itemData);
+
+  next(item) {
+    this.props.pushToNextWeek(item);
   }
 
   render() {
-    // const item = this.props.itemData.name;
-    let status = this.state.isChecked;
+    const { item } = this.props;
+    const { isChecked } = this.state;
 
     return (
-      <li className="list-group-item py-0 d-flex justify-content-between align-items-baseline">
-        <div>
+      <li className="list-group-item py-2 d-flex justify-content-between align-items-baseline">
+        <div style={{ textDecoration: isChecked ? "line-through" : "none" }}>
           <input
-            checked={status}
-            className="mr-1"
+            checked={isChecked}
+            className="mr-2"
             type="checkbox"
-            onChange={() => this.setCompleted()}
+            onChange={() => this.complete(item.id, item.completed)}
           />
-          {this.props.item.name}
+          {item.name}
         </div>
         <div>
           <button
-            className="btn btn-outline-dark mr-2"
-            onClick={() => this.delete()}
+            className="btn btn-outline-dark mx-2 p-1"
+            onClick={() => this.delete(item.id)}
           >
-            Del
+            Delete
           </button>
-          <button className="btn btn-outline-dark" onClick={() => this.next()}>
+          <button
+            className="btn btn-outline-dark p-1"
+            onClick={() => this.next(item)}
+          >
             Next
           </button>
         </div>
