@@ -4,8 +4,9 @@ import List from "./components/List";
 import PastLists from "./components/PastLists";
 import LoginPage from "./components/LoginPage";
 import RegisterPage from "./components/RegisterPage";
+import HomePage from "./components/HomePage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { NavBar } from "./components/NavBar";
+import NavBar from "./components/NavBar";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { userIsLoggedIn } from "./components/Auth";
 import { getUser } from "./services/api";
@@ -45,6 +46,9 @@ class App extends React.Component {
               </h2>
             )}
             <Switch>
+              {/* <ProtectedRoute path="/currentList">
+                <List />
+              </ProtectedRoute> */}
               <ProtectedRoute path="/pastList">
                 <PastLists />
               </ProtectedRoute>
@@ -54,8 +58,8 @@ class App extends React.Component {
               <Route path="/login">
                 <LoginPage login={this.login} />
               </Route>
-              <ProtectedRoute path="/">
-                <List />
+              <ProtectedRoute exact path="/">
+                <HomePage />
               </ProtectedRoute>
             </Switch>
           </div>

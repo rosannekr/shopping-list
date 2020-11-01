@@ -44,16 +44,23 @@ while (tempItems.length) {
   weeks.push(tempItems.splice(0, weekLength));
 }
 
-const weeksSQL = weeks.map((e, i) => {
-  return `INSERT INTO weeks (start) SELECT DATE_SUB(CURDATE() - WEEKDAY(CURDATE()), INTERVAL ${i} week);`;
-});
+// get date of last monday
+const monday = `DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY)`;
+// start from last week and count backwards
+const weeksSQL = weeks.map(
+  (e, i) =>
+    `INSERT INTO weeks (start) SELECT DATE_SUB(${monday}, INTERVAL ${
+      i + 1
+    } week);`
+);
 
 //items list
-const itemsSQL = items.map((e, i) => {
-  return `INSERT INTO items (weekId, productId, userId) VALUES((SELECT id FROM weeks WHERE start = DATE_SUB(CURDATE() - WEEKDAY(CURDATE()), INTERVAL ${Math.floor(
-    i / 40
-  )} week)), (SELECT id FROM products WHERE name = "${e}"), 1);`;
-});
+const itemsSQL = items.map(
+  (e, i) =>
+    `INSERT INTO items (weekId, productId, userId) VALUES((SELECT id FROM weeks WHERE start = DATE_SUB(${monday}, INTERVAL ${
+      Math.floor(i / 40) + 1
+    } week)), (SELECT id FROM products WHERE name = "${e}"), 1);`
+);
 
 // users
 const usersSQL = [

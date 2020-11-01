@@ -59,10 +59,20 @@ export const getUser = async () => {
   return await axios.get("/users/profile");
 };
 
-// Get items
+// Get this week's items
 export const getItems = async () => {
   return await axios.get("/currentApi/items");
 };
+
+// Get suggestions (default filter by frequency)
+export const getSuggestions = async (filter = "frequent") => {
+  return await axios.get(`/currentApi/suggestions?filter=${filter}`);
+};
+
+// // Add items
+// export const addItems = async () => {
+//   return await axios.post("/currentApi/items", { name });
+// };
 
 // Add item
 export const addItem = async (name) => {

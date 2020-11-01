@@ -14,13 +14,13 @@ CREATE TABLE `items` (
 
 CREATE TABLE `weeks` (
 	`id` INT NOT NULL AUTO_INCREMENT UNIQUE,
-	`start` DATE NOT NULL,
+	`start` DATE NOT NULL UNIQUE,
 	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `products` (
 	`id` INT NOT NULL AUTO_INCREMENT UNIQUE,
-	`name` varchar(255) NOT NULL,
+	`name` varchar(255) NOT NULL UNIQUE,
 	PRIMARY KEY (`id`)
 );
 

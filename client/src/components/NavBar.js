@@ -1,6 +1,7 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
-export function NavBar(props) {
+function NavBar(props) {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary mb-5">
       {props.loggedIn ? (
@@ -8,6 +9,11 @@ export function NavBar(props) {
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">
               <Link className="nav-link" to="/">
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/currentList">
                 Current List
               </Link>
             </li>
@@ -40,3 +46,5 @@ export function NavBar(props) {
     </nav>
   );
 }
+
+export default NavBar;

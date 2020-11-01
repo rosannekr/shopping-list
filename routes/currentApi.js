@@ -7,17 +7,63 @@ const userMustBeLoggedIn = require("../guards/userMustBeLoggedIn");
 
 router.use(bodyParser.json());
 
-/* Get suggestions for this week's shopping list */
+// Create date variables
+const monday = `DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY)`;
+const thisWeekId = `(SELECT weeks.id FROM weeks WHERE start = ${monday})`;
+
+/* Get this week's items */
 router.get("/items", userMustBeLoggedIn, async (req, res) => {
-  let sql = `SELECT products.name, products.id FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id}`;
+  try {
+    // Get this week's items
+    let results = await db(
+      `SELECT items.id, products.name, items.completed FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} AND weekId = ${thisWeekId};`
+    );
+
+    // If no results, generate new items
+    if (!results.data.length) {
+      // Create new week (or skip if it already exists)
+      await db(`INSERT IGNORE INTO weeks (start) VALUES (${monday});`);
+
+      // Get id's of most frequently bought products
+      const resultsIds = await db(
+        `SELECT products.id FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} GROUP BY items.productId ORDER BY COUNT(items.id) DESC LIMIT 40;`
+      );
+      const productIds = resultsIds.data;
+
+      console.log("product ids", productIds);
+
+      // Create row values
+      const rows = productIds
+        .map((e) => `(${thisWeekId}, ${e.id}, ${req.decoded.user_id})`)
+        .join(", ");
+
+      console.log("rows", rows);
+
+      // Add new items to database
+      await db(`INSERT INTO items (weekId, productId, userId) VALUES ${rows}`);
+
+      // Get this week's items again
+      results = await db(
+        `SELECT items.id, products.name, items.completed FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} AND weekId = ${thisWeekId};`
+      );
+    }
+    res.send(results.data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+/* Get suggestions for this week's list */
+router.get("/suggestions", userMustBeLoggedIn, async (req, res) => {
+  let sql = "";
 
   // Change query based on query parameter
-  if (req.query.filter === "frequent" || !req.query.filter) {
+  if (req.query.filter === "frequent") {
     // Get most frequently bought items: count how many times products occur in items table
-    sql += ` GROUP BY items.productId ORDER BY COUNT(items.id) DESC LIMIT 40;`;
+    sql = `SELECT products.id FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} GROUP BY items.productId ORDER BY COUNT(items.id) DESC LIMIT 30;`;
   } else if (req.query.filter === "recent") {
     // Get most recently bought items: set weekId to be last week
-    sql += ` AND weekId = (SELECT weeks.id FROM weeks WHERE start = DATE_SUB(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY), INTERVAL 1 WEEK));`;
+    sql = `SELECT DISTINCT products.id FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} AND weekId = (SELECT weeks.id FROM weeks WHERE start = DATE_SUB(${monday}, INTERVAL 1 WEEK));`;
   }
 
   try {
@@ -33,21 +79,18 @@ router.post("/items", userMustBeLoggedIn, async (req, res) => {
   try {
     // Check if current week is in database
     const resultsWeek = await db(
-      `SELECT id FROM weeks WHERE start = CURDATE() - WEEKDAY(CURDATE());`
+      `SELECT id FROM weeks WHERE start = ${monday};`
     );
 
     // Add new week if it's not there
     if (!resultsWeek.data.length) {
-      await db(
-        `INSERT INTO weeks (start) VALUES (CURDATE() - WEEKDAY(CURDATE()));`
-      );
+      await db(`INSERT INTO weeks (start) VALUES (${monday});`);
     }
 
     // Check if product is in database
-    const resultsProduct = await db(`SELECT id FROM products
-  WHERE name = "${req.body.name}";`);
-
-    console.log("resultsProduct data", resultsProduct.data.length);
+    const resultsProduct = await db(
+      `SELECT id FROM products WHERE name = "${req.body.name}";`
+    );
 
     // Add new product if it's not there
     if (!resultsProduct.data.length) {
@@ -57,7 +100,7 @@ router.post("/items", userMustBeLoggedIn, async (req, res) => {
     // Assign weekId and productId to result of earlier queries or a nested query
     const weekId = resultsWeek.data.length
       ? resultsWeek.data[0].id
-      : `(SELECT id FROM weeks WHERE start = CURDATE() - WEEKDAY(CURDATE()))`;
+      : `(SELECT id FROM weeks WHERE start = ${monday})`;
 
     const productId = resultsProduct.data.length
       ? resultsProduct.data[0].id
