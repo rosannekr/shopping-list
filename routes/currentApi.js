@@ -91,29 +91,6 @@ router.post("/items", userMustBeLoggedIn, async (req, res) => {
   }
 });
 
-router.post("/items/auto/push", async (req, res) => {
-  //create next week if not exists, add item to next week
-  await db(`INSERT INTO weeks (start) SELECT DATE_ADD(
-    DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY),INTERVAL 1 week)
-    WHERE NOT EXISTS (SELECT * FROM weeks WHERE start= 
-    DATE_ADD(DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY),INTERVAL 1 week));
-
-    INSERT INTO items (weekid, productid)
-    SELECT weeks.id, products.id FROM weeks, products
-    WHERE start=DATE_ADD(DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY),INTERVAL 1 week)
-    AND name='${req.body.name}';`);
-
-  //return this week
-  const results = await db(`SELECT items.id, items.completed,products.name
-      FROM items INNER JOIN products 
-      ON items.productId=products.id
-      WHERE items.weekId=(SELECT id FROM weeks
-      WHERE weeks.start=DATE_SUB(CURDATE(),
-      INTERVAL DAYOFWEEK(CURDATE())-2 DAY));`);
-
-  res.send(results.data);
-});
-
 /* Update item */
 // Changed this to use url param
 router.put("/items/:id", userMustBeLoggedIn, async (req, res) => {
@@ -157,6 +134,29 @@ router.delete("/items/:id", userMustBeLoggedIn, async (req, res) => {
   } catch (error) {
     res.status(500).send(error);
   }
+});
+
+router.post("/items/auto/push", async (req, res) => {
+  //create next week if not exists, add item to next week
+  await db(`INSERT INTO weeks (start) SELECT DATE_ADD(
+    DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY),INTERVAL 1 week)
+    WHERE NOT EXISTS (SELECT * FROM weeks WHERE start= 
+    DATE_ADD(DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY),INTERVAL 1 week));
+
+    INSERT INTO items (weekid, productid)
+    SELECT weeks.id, products.id FROM weeks, products
+    WHERE start=DATE_ADD(DATE_SUB(CURDATE(), INTERVAL DAYOFWEEK(CURDATE())-2 DAY),INTERVAL 1 week)
+    AND name='${req.body.name}';`);
+
+  //return this week
+  const results = await db(`SELECT items.id, items.completed,products.name
+      FROM items INNER JOIN products 
+      ON items.productId=products.id
+      WHERE items.weekId=(SELECT id FROM weeks
+      WHERE weeks.start=DATE_SUB(CURDATE(),
+      INTERVAL DAYOFWEEK(CURDATE())-2 DAY));`);
+
+  res.send(results.data);
 });
 
 module.exports = router;

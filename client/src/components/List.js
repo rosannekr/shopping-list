@@ -112,7 +112,7 @@ class List extends React.Component {
           <h1>Shopping List</h1>
           <AddItem handleAdd={this.handleAdd} />
           <div>
-            <div className="list-group w-75 mx-auto shadow">
+            <div className="list-group d-inline-block shadow">
               {data?.map((item) => (
                 <Item
                   key={item.id}
