@@ -24,8 +24,6 @@ class App extends React.Component {
 
   login = async () => {
     const res = await getUser();
-    console.log(res.data.username);
-
     this.setState({ loggedIn: true, username: res.data.username });
   };
 
@@ -40,11 +38,6 @@ class App extends React.Component {
         <NavBar loggedIn={this.state.loggedIn} logout={this.logout} />
         <div className="container text-center">
           <div>
-            {this.state.loggedIn && (
-              <h2 className="text-capitalize text-left">
-                Welcome, {this.state.username}
-              </h2>
-            )}
             <Switch>
               <ProtectedRoute path="/pastList">
                 <PastLists />
@@ -56,7 +49,7 @@ class App extends React.Component {
                 <LoginPage login={this.login} />
               </Route>
               <ProtectedRoute exact path="/">
-                <List />
+                <List username={this.state.username} />
               </ProtectedRoute>
             </Switch>
           </div>

@@ -16,7 +16,7 @@ router.get("/items", userMustBeLoggedIn, async (req, res) => {
   try {
     // Get this week's items
     let results = await db(
-      `SELECT items.id, products.name, items.completed FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} AND weekId = ${thisWeekId};`
+      `SELECT items.id, products.name, items.completed, items.weekId FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} AND weekId = ${thisWeekId} ORDER BY items.id DESC;`
     );
 
     // If no results, generate new items
@@ -30,14 +30,10 @@ router.get("/items", userMustBeLoggedIn, async (req, res) => {
       );
       const productIds = resultsIds.data;
 
-      console.log("product ids", productIds);
-
       // Create row values
       const rows = productIds
         .map((e) => `(${thisWeekId}, ${e.id}, ${req.decoded.user_id})`)
         .join(", ");
-
-      console.log("rows", rows);
 
       // Add new items to database
       await db(`INSERT INTO items (weekId, productId, userId) VALUES ${rows}`);
@@ -57,14 +53,16 @@ router.get("/items", userMustBeLoggedIn, async (req, res) => {
 router.get("/suggestions", userMustBeLoggedIn, async (req, res) => {
   let sql = "";
 
-  // Change query based on query parameter
-  if (req.query.filter === "frequent") {
-    // Get most frequently bought items: count how many times products occur in items table
-    sql = `SELECT products.id FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} GROUP BY items.productId ORDER BY COUNT(items.id) DESC LIMIT 30;`;
-  } else if (req.query.filter === "recent") {
-    // Get most recently bought items: set weekId to be last week
-    sql = `SELECT DISTINCT products.id FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} AND weekId = (SELECT weeks.id FROM weeks WHERE start = DATE_SUB(${monday}, INTERVAL 1 WEEK));`;
-  }
+  console.log(req.query);
+
+  // Save nested queries
+  const queryProductIds = `SELECT productId FROM items WHERE userId = ${req.decoded.user_id} AND weekId = ${thisWeekId}`;
+  const queryLastWeek = `(SELECT weeks.id FROM weeks WHERE start = DATE_SUB(${monday}, INTERVAL 1 WEEK))`;
+
+  // Get most recently bought items
+  // set weekId to be last week, skip products that are already in items
+  sql = `SELECT DISTINCT items.productId, products.name FROM items INNER JOIN products ON items.productId = products.id WHERE userId = ${req.decoded.user_id} AND weekId = ${queryLastWeek} AND productId NOT IN (${queryProductIds}) LIMIT ${req.query.offset}, 5;`;
+  // }
 
   try {
     const results = await db(sql);
@@ -119,35 +117,31 @@ router.post("/items/auto/push", async (req, res) => {
 /* Update item */
 // Changed this to use url param
 router.put("/items/:id", userMustBeLoggedIn, async (req, res) => {
-  try {
-    if (req.query.prop === "weekId") {
-      // Save query to get current week
-      const currentWeek = `SELECT start FROM weeks WHERE id = (SELECT weekId FROM items WHERE id = ${req.params.id})`;
+  const { prop, value } = req.body;
 
+  try {
+    if (prop === "weekId") {
       // Add next week (or skip if it already exists)
       await db(
-        `INSERT IGNORE INTO weeks (start) VALUES (DATE_ADD(${currentWeek}, INTERVAL 1 WEEK));`
+        `INSERT IGNORE INTO weeks (start) VALUES (DATE_ADD(${monday}, INTERVAL 1 WEEK));`
       );
 
-      // Save query to get id of next week
-      const weekId = `(SELECT id FROM weeks WHERE start = DATE_ADD(${currentWeek}, INTERVAL 1 WEEK))`;
-
+      // Update weekId of item
       await db(
-        `UPDATE items set ${req.query.prop} = ${weekId} WHERE id = ${req.params.id};`
+        `UPDATE items set weekId = (SELECT id FROM weeks WHERE start = DATE_ADD(${monday}, INTERVAL 1 WEEK)) WHERE id = ${req.params.id};`
       );
+    } else if (prop === "completed") {
+      // Check current status
+      if (!value) {
+        await db(
+          `UPDATE items set completed = CURDATE() WHERE id = ${req.params.id};`
+        );
+      } else {
+        await db(
+          `UPDATE items set completed = NULL WHERE id = ${req.params.id};`
+        );
+      }
     }
-
-    // Check current status
-    // if (!req.body.status) {
-    //   await db(
-    //     `UPDATE items set completed = CURDATE() WHERE id = ${req.params.id};`
-    //   );
-    // } else {
-    //   await db(
-    //     `UPDATE items set completed = NULL WHERE id = ${req.params.id};`
-    //   );
-    // }
-
     res.send("Item updated");
   } catch (error) {
     res.status(500).send(error);

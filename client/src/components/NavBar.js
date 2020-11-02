@@ -9,11 +9,6 @@ function NavBar(props) {
           <ul className="navbar-nav mr-auto">
             <li className="nav-item">
               <Link className="nav-link" to="/">
-                Home
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/currentList">
                 Current List
               </Link>
             </li>
@@ -24,9 +19,11 @@ function NavBar(props) {
             </li>
           </ul>
           <div className="navbar-nav">
-            <Link className="nav-link" to="/login" onClick={props.logout}>
-              Log Out
-            </Link>
+            <li className="nav-item">
+              <Link className="nav-link" to="/login" onClick={props.logout}>
+                Log Out
+              </Link>
+            </li>
           </div>
         </div>
       ) : (

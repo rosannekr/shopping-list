@@ -1,6 +1,8 @@
 import React from "react";
 import "../App.css";
 import Item from "./Item";
+import SuggestionsList from "./SuggestionsList";
+import AddItem from "./AddItem";
 import { getItems, addItem, deleteItem, updateItem } from "../services/api";
 
 class List extends React.Component {
@@ -28,12 +30,22 @@ class List extends React.Component {
     }
   }
 
-  handleAdd = async (e) => {
-    e.preventDefault();
+  updateData = async () => {
+    // get items of current week
+    try {
+      const res = await getItems();
+      this.setState({ data: res.data });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  handleAdd = async (name) => {
     // add item to this week, but first add to products and
     // week if not already there
+
     try {
-      await addItem(this.state.input);
+      await addItem(name);
       const res = await getItems();
       this.setState({
         data: res.data,
@@ -44,10 +56,10 @@ class List extends React.Component {
     }
   };
 
-  updateItem = async (id, status) => {
-    //update to completed
+  completeItem = async (item) => {
+    // set completed to date of today
     try {
-      await updateItem(id, "completed");
+      await updateItem(item.id, "completed", item.completed);
       const res = await getItems();
       this.setState({
         data: res.data,
@@ -73,8 +85,11 @@ class List extends React.Component {
   pushToNextWeek = async (item) => {
     //move item to next week's list
     try {
-      await updateItem(item.id, "weekId");
-      this.deleteItem(item.id);
+      await updateItem(item.id, "weekId", item.weekId);
+      const res = await getItems();
+      this.setState({
+        data: res.data,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -84,32 +99,33 @@ class List extends React.Component {
     let data = this.state.data;
 
     return (
-      <div>
-        <h1>Shopping List</h1>
-        <div>
-          <form className="form-inline justify-content-center mb-3">
-            <input
-              className="form-control mr-1"
-              onChange={this.updateInput}
-              value={this.state.input}
-              placeholder="New item..."
-            />
-            <button className="btn btn-primary" onClick={this.handleAdd}>
-              Add
-            </button>
-          </form>
-
-          <div className="list-group d-inline-block">
-            {data.map((item) => (
-              <Item
-                key={item.id}
-                item={item}
-                deleteItem={this.deleteItem}
-                updateItem={this.updateItem}
-                pushToNextWeek={this.pushToNextWeek}
-              />
-            ))}
+      <div className="row">
+        <div className="col-3 text-left">
+          <h4>Hi, {this.props.username}!</h4>
+          <p>
+            This is your shopping list for this week, based on your most
+            frequent purchases. Every Monday a new list is generated.
+          </p>
+        </div>
+        <div className="col">
+          <h1>Shopping List</h1>
+          <AddItem handleAdd={this.handleAdd} />
+          <div>
+            <div className="list-group d-inline-block">
+              {data.map((item) => (
+                <Item
+                  key={item.id}
+                  item={item}
+                  deleteItem={this.deleteItem}
+                  completeItem={this.completeItem}
+                  pushToNextWeek={this.pushToNextWeek}
+                />
+              ))}
+            </div>
           </div>
+        </div>
+        <div className="col">
+          <SuggestionsList updateData={this.updateData} />
         </div>
       </div>
     );

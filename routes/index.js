@@ -5,6 +5,18 @@ const db = require("../model/helper");
 
 router.use(bodyParser.json());
 
+// Search products
+router.get("/products", async (req, res) => {
+  try {
+    const results = await db(
+      `SELECT * FROM products WHERE name LIKE "${req.query.q}%" LIMIT 5`
+    );
+    res.send(results.data);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 router.get("/items", (req, res) => {
   db("SELECT * FROM items;")
     .then((results) => {

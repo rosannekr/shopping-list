@@ -74,17 +74,17 @@ export const deleteItem = async (id) => {
   return await axios.delete(`/currentApi/items/${id}`);
 };
 
-// Complete item
-export const completeItem = async (id, status) => {
-  return await axios.put(`/currentApi/items/${id}`, { status });
-};
-
 // Update item
-export const updateItem = async (id, prop) => {
-  return await axios.put(`/currentApi/items/${id}?prop=${prop}`);
+export const updateItem = async (id, prop, value) => {
+  return await axios.put(`/currentApi/items/${id}`, { prop, value });
 };
 
-// Get suggestions (default filter by frequency)
-export const getSuggestions = async (filter = "frequent") => {
-  return await axios.get(`/currentApi/suggestions?filter=${filter}`);
+// Get suggestions
+export const getSuggestions = async (offset) => {
+  return await axios.get(`/currentApi/suggestions?offset=${offset}`);
+};
+
+// Get products
+export const getProducts = async (input) => {
+  return await axios.get(`/products?q=${input}`);
 };
