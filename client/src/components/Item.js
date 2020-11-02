@@ -31,24 +31,18 @@ class Item extends React.Component {
       <li className="list-group-item py-2 d-flex justify-content-between align-items-baseline">
         <div
           style={{ textDecoration: isChecked ? "line-through" : "none" }}
-          className={isChecked ? "text-secondary mr-5" : "mr-4"}
+          className={isChecked ? "text-secondary mr-5" : "mr-5"}
         >
           <input
             checked={isChecked}
-            className="mr-2"
+            className="mr-3"
             type="checkbox"
             onChange={() => this.complete(item)}
           />
-          {item.name}
+          <span>{item.name}</span>
         </div>
         <div>
-          <button
-            className="btn mx-2"
-            onClick={() => this.delete(item.id)}
-            data-toggle="tooltip"
-            data-placement="right"
-            title="Tooltip on right"
-          >
+          <button className="btn mx-2" onClick={() => this.delete(item.id)}>
             <i className="fas fa-minus"></i>
           </button>
           {/* <button

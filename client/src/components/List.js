@@ -104,15 +104,16 @@ class List extends React.Component {
           <h4>Hi, {this.props.username}!</h4>
           <p>
             This is your shopping list for this week, based on your most
-            frequent purchases. Every Monday a new list is generated.
+            frequent purchases. <br />
+            Every Monday a new list is generated.
           </p>
         </div>
         <div className="col">
           <h1>Shopping List</h1>
           <AddItem handleAdd={this.handleAdd} />
           <div>
-            <div className="list-group d-inline-block">
-              {data.map((item) => (
+            <div className="list-group w-75 mx-auto shadow">
+              {data?.map((item) => (
                 <Item
                   key={item.id}
                   item={item}
@@ -124,7 +125,7 @@ class List extends React.Component {
             </div>
           </div>
         </div>
-        <div className="col">
+        <div className="col pt-5">
           <SuggestionsList updateData={this.updateData} />
         </div>
       </div>

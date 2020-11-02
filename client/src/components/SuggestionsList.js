@@ -34,10 +34,13 @@ function SuggestionsList(props) {
       <h3>Suggestions</h3>
       <p className="text-secondary">Based on your recent purchases</p>
       <div className="d-flex justify-content-center">
-        <div className="list-group d-inline-block mr-2 mb-2">
+        <div className="list-group mr-2 mb-2 w-75">
           {data.map((item) => (
-            <li key={item.productId} className="list-group-item text-left pr-5">
-              <button className="btn mr-4" onClick={() => handleAdd(item)}>
+            <li
+              key={item.productId}
+              className="list-group-item text-left mb-2 border-top py-2 shadow-sm"
+            >
+              <button className="btn mr-3" onClick={() => handleAdd(item)}>
                 <i className="fas fa-plus"></i>
               </button>
               {item.name}

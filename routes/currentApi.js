@@ -40,7 +40,7 @@ router.get("/items", userMustBeLoggedIn, async (req, res) => {
 
       // Get this week's items again
       results = await db(
-        `SELECT items.id, products.name, items.completed FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} AND weekId = ${thisWeekId};`
+        `SELECT items.id, products.name, items.completed FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} AND weekId = ${thisWeekId} ORDER BY items.id DESC;`
       );
     }
     res.send(results.data);
