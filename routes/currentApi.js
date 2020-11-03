@@ -26,13 +26,14 @@ router.get("/items", userMustBeLoggedIn, async (req, res) => {
 
       // Get id's of most frequently bought products
       const resultsIds = await db(
-        `SELECT products.id FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} GROUP BY items.productId ORDER BY COUNT(items.id) DESC LIMIT 40;`
+        `SELECT products.id FROM items INNER JOIN products ON items.productId = products.id WHERE items.userId = ${req.decoded.user_id} GROUP BY items.productId ORDER BY COUNT(items.id) DESC LIMIT 20;`
       );
       const productIds = resultsIds.data;
 
       // Create row values
       const rows = productIds
         .map((e) => `(${thisWeekId}, ${e.id}, ${req.decoded.user_id})`)
+        .reverse()
         .join(", ");
 
       // Add new items to database

@@ -104,8 +104,7 @@ class List extends React.Component {
           <h4>Hi, {this.props.username}!</h4>
           <p>
             This is your shopping list for this week, based on your most
-            frequent purchases. <br />
-            Every Monday a new list is generated.
+            frequent purchases. Every Monday a new list will be generated.
           </p>
         </div>
         <div className="col">
