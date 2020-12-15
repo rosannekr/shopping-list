@@ -11,6 +11,14 @@ Here's a sneak peek:
 
 ![screenshot](/screenshot.png)
 
+## Technologies
+
+- React
+- Node
+- Express
+- MySQL
+- Bootstrap
+
 ## Setup
 
 ### Dependencies
