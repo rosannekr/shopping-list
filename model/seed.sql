@@ -1,5 +1,5 @@
-INSERT INTO users (username, password) VALUES ('user1', '$2b$10$.FzHPRlvtV1ZXY/EUsYGae9qCds4P8O08bp1WMB0NsALcqa/cXqfi');
-INSERT INTO users (username, password) VALUES ('user2', '$2b$10$QSslCBJ3/hJe6wCcWKLmuOASS.UHfLDefJ5oRwIe2R7EyYpQLxVMS');
+INSERT INTO users (username, password) VALUES ('user1', '$2b$10$y46OseuG3qydEnpQ36P7FOz75GQ4oTrcSTouY1Ek37JnYOkJ7jiUy');
+INSERT INTO users (username, password) VALUES ('user2', '$2b$10$y46OseuG3qydEnpQ36P7FOz75GQ4oTrcSTouY1Ek37JnYOkJ7jiUy');
 INSERT INTO products (name) VALUES ("popcorn");
 INSERT INTO products (name) VALUES ("sliced cheese");
 INSERT INTO products (name) VALUES ("walnut");

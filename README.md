@@ -7,6 +7,10 @@ An app that generates a weekly shopping list based on your previous purchases. B
 - Search bar to search items that were previously added
 - Styling with Bootstrap
 
+Here's a sneak peek:
+
+![screenshot](/screenshot.png)
+
 ## Setup
 
 ### Dependencies
@@ -24,7 +28,10 @@ Create an `.env` file in the project directory and add
 ```
 DB_NAME=YOUR_DATABASE
 DB_PASS=YOUR_PASSWORD
+SUPER_SECRET=YOUR_SECRET
 ```
+
+JSON Web Tokens are used for user authorization. The secret in your `.env` file is used to sign the tokens.
 
 Run `npm run migrate` in the project directory to create the tables.
 Run `npm run seed` in the project directory to add seed data to the tables.
